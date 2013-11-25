@@ -1,0 +1,92 @@
+@import "compass"
+
+// Variables
+// =================================
+$defaultPadding : 15px
+
+// View
+// =================================
+#explorer-view
+  
+  .loading
+    margin: 0
+
+  .custom-dropdown-menu
+    padding: 0 0
+
+  #section-url
+    position  : fixed
+    top       : 55px 
+    left      : 0
+    margin    : 0
+    width     : 100%
+    z-index   : 1000
+    padding   : 2px
+
+    #tabs-and-filter
+      margin: 5px 0
+
+
+  #api-core-container
+    margin        : 80px 0
+    overflow      : auto
+    
+    .objective-illustration
+      padding   : $defaultPadding 0 ($defaultPadding * 2) 0
+      text-align: center
+      font-size : 30px
+      overflow  : hidden
+
+      li
+        width      : 400px
+        min-height : 100px
+        padding    : 0
+        margin     : 1px 
+
+
+    #api-core-header
+      padding     : $defaultPadding
+
+    #api-core
+      margin-top: 15px
+      
+
+      #list-of-links, 
+      #list-of-texts,
+      #list-of-images,
+      #list-of-documents,
+      #list-of-videos, 
+      #list-of-audios, 
+      #list-of-ebooks
+        li 
+          padding   : 13px
+
+      .explorer-link,
+      .explorer-document,
+      .explorer-image,
+      .explorer-song 
+        width     : 200px
+        overflow        : hidden
+        white-space     : nowrap
+        display         : block
+        text-overflow   : ellipsis
+        span
+          font-size : 50px 
+        img
+          height    : 150px 
+        // span        
+        //   font-size : 50px
+      // .explorer-link
+      //   width           : 100px
+      //   height          : 100px
+      //   line-height     : 50px
+      //   text-overflow   : ellipsis
+      //   @include border-radius(500px)
+      
+      // .explorer-link:hover
+      //   color             : #ffffff
+      //   background-image  : linear-gradient(#ff6707,#dd5600 60%,#c94e00)
+      //   background-repeat : no-repeat
+      //   border            : #dd5600
+
+  

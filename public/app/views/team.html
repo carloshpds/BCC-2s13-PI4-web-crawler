@@ -1,0 +1,35 @@
+<div class="container">
+  <div class="jumbotron">
+    <div class="container">
+      <h1>Interactive projects IV - Team </h1>
+    </div>
+  </div>
+  
+
+
+  <!-- Team-->
+  <ul class="list-unstyled">
+    <li ng-repeat="person in teamGroup">
+      <div class="jumbotron" ng-model="person">
+        <div class="container row">
+
+          <div class="media col-md-12">
+            <a class="pull-left" href="{{person.img}}">
+              <img class="media-object img-circle" src="{{person.img}}" width="200" height="200">
+            </a>
+            <div class="media-body">
+              <h2 class="media-heading">{{person.name}}</h2>
+              <p>{{person.job}}</p>
+              <p>
+                <div class="btn-group btn-group-lg">
+                  <a class="btn btn-default" href="{{person.github}}" target="_blank">GitHub</a>
+                  <a class="btn btn-default" href="{{person.linkedin}}" target="_blank">Linkedin</a>
+                </div>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>

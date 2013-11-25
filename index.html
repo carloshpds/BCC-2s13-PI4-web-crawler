@@ -1,0 +1,42 @@
+<html>
+ <head>
+  <title>Server Side Event Test</title>
+   
+ </head>
+ <body>
+   
+  Test box! 
+  <textarea id="Test" rows="20" cols="50"></textarea>
+  <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+
+  <input type="button" name="runCrawl"  onclick="x()"
+  />
+ 
+
+  <script type="text/javascript">
+
+	function x(){
+		$.ajax({
+		  url: "start",
+		  context: document.body
+		}).done(function() {
+		  $(this).addClass("done");
+		});
+
+		if (!!window.EventSource) {
+		  var timeSrc = new EventSource('yieldResource');
+		  timeSrc.addEventListener('time', function (event) {
+
+	       document.getElementById("Test").innerHTML += "\n " + event.data
+	      });
+
+		} else {
+		}
+    
+	}
+   
+	
+    
+  </script>
+ </body>
+</html>

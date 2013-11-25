@@ -1,0 +1,239 @@
+
+<article id="explorer-view" class="container">
+  <!-- <button ng-click="downloadFile()">Download</button> -->
+  <section id="section-url" class="row well">
+
+    <!-- Form Input -->
+    <form id="form-url" class="form-horizontal  col-md-12" role="form">
+      <div class=" input-group">
+        <input type="text" class="form-control" id="url-input" ng-model="url" placeholder="Paste or write your URL here">
+        <span class="input-group-btn">
+          <button class="btn btn-warning" type="submit" ng-click='loadUrl()'>Search</button>
+        </span>
+      </div>  
+    </form>
+
+    <!-- Alert Error -->
+    <div class="alert alert-danger">
+      <h4>Oh No! Houston, we have a problem...</h4>
+      <p ng-model="url">Site: {{url}} </p>
+      <p ngModel="errorMessage">{{errorMessage}}</p>
+      <br />
+      <buttton class="btn btn-warning" ng-click="doAnotherSearch()">Do another search</buttton>
+      <button class="btn btn-success" ng-click="loadUrl()">Try again</button>
+    </div>
+
+   
+    <div id="tabs-and-filter" class="row">
+      <!-- Category List -->
+      <div class="col-md-8">
+        <ul id="category-files" class="nav nav-pills" >
+          <li class="active">
+            <a href="#tab-explorer-results" data-toggle="tab">
+              <span class="badge" ng-model="searchResultsLength">{{searchResultsLength}}</span>
+              Results
+            </a>
+          </li>
+          <li >
+            <a href="#tab-explorer-links" data-toggle="tab">Links</a>
+          </li>
+          <li>
+            <a href="#tab-explorer-texts" data-toggle="tab">Text files</a>
+          </li>
+          <li>
+            <a href="#tab-explorer-documents" data-toggle="tab">Documents</a>
+          </li>
+          <li>
+            <a href="#tab-explorer-images" data-toggle="tab">Images</a>
+          </li>
+          <li>
+            <a href="#tab-explorer-videos" data-toggle="tab">Videos</a>
+          </li>
+          <li>
+            <a href="#tab-explorer-audios" data-toggle="tab">Audio</a>
+          </li>
+          
+        </ul>
+      </div>
+  
+      <div class="col-md-3">
+        <div class="input-group">
+         <input  type="text" class="form-control" ng-model="searchItem"
+                placeholder="Write something here to filter">
+          <div class="input-group-btn">
+            <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">
+              <span class="glyphicon glyphicon-cog"></span> <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu pull-right custom-dropdown-menu">
+              <li><button class="btn btn-warning btn-block" ng-click="doAnotherSearch()">Another Search</button></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    
+    <div class="progress progress-striped active loading">
+      <div class="progress-bar"  role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+      </div>
+    </div>
+  </section>
+
+  <section id="api-core-container" class="row">
+  
+    <!-- Illustration -->
+    <div class="objective-illustration jumbotron" ng-show="illustration" >
+      <div class="container row ">
+        <h1>Let's crawl and search for...</h1>
+        <ul class="list-unstyled list-inline">
+          <li class="well">
+            <span class="glyphicon glyphicon-link"></span><br />
+            Links
+          </li>
+          <li class="well">
+            <span class="glyphicon glyphicon-list-alt"></span><br />
+            Text files
+          </li>
+          <li class="well">
+              <span class="glyphicon glyphicon-inbox"></span><br />
+              Documents
+          </li>
+          <li class="well">
+            <span class="glyphicon glyphicon-picture"></span><br />
+            Images
+          </li>
+          <li class="well">
+            <span class="glyphicon glyphicon-film "></span><br />
+            Videos
+          </li>
+          <li class="well">
+            <span class="glyphicon glyphicon-music "></span><br />
+            Songs
+          </li>
+        </ul>
+      </div>
+    </div>
+    
+    <div id="api-core" class="tab-content">
+      
+      <!-- Results -->
+      <div id="tab-explorer-results" class="tab-pane active">
+        <div class="objective-illustration jumbotron" >
+          <div class="container row ">
+            <h1>Results</h1>
+            <ul class="list-unstyled list-inline">
+              <li ng-model="explorerLinks"class="well">
+                <span class="glyphicon glyphicon-link"></span><br />
+                <strong>{{explorerLinks.length}}</strong> Links
+              </li>
+              <li ng-model="explorerTextFiles" class="well">
+                <span class="glyphicon glyphicon-list-alt"></span><br />
+                <strong>{{explorerTextFiles.length}}</strong> Text files
+              </li>
+              <li ng-model="explorerDocuments" class="well">
+                <span class="glyphicon glyphicon-inbox"></span><br />
+                <strong>{{explorerDocuments.length}}</strong> Documents
+              </li>
+              <li ng-model="explorerImages" class="well">
+                <span class="glyphicon glyphicon-picture"></span><br />
+                <strong>{{explorerImages.length}}</strong> Images
+              </li>
+              <li ng-model="explorerVideos" class="well">
+                <span class="glyphicon glyphicon-film "></span><br />
+                <strong>{{explorerVideos.length}}</strong> Videos
+              </li>
+              <li ng-model="explorerSongs" class="well">
+                <span class="glyphicon glyphicon-music "></span><br />
+                <strong>{{explorerSongs.length}}</strong> Songs
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Links -->
+      <div id="tab-explorer-links" class="tab-pane">
+        <ul id="list-of-links" class="list-inline">
+          <li ng-repeat="link in explorerLinks | filter:searchItem" >
+            <a ng-model="link" target="_blank" href="{{link}}" class="explorer-link btn btn-default" title="{{link}}">
+              <span class="glyphicon glyphicon-link"></span><br />
+              {{link}}
+            </a>
+          </li>
+        </ul>
+      </div>
+      
+
+      <!-- Texts -->
+      <div id="tab-explorer-texts" class="tab-pane">
+        <ul id="list-of-texts" class="list-inline">
+          <li ng-repeat="link in explorerTextFiles | filter:searchItem" >
+            <button ng-model="link" href="{{link.href}}" class="explorer-link btn btn-default">
+              <span class="glyphicon glyphicon-list-alt"></span>
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Documents -->
+      <div id="tab-explorer-documents" class="tab-pane">
+        <ul id="list-of-documents" class="list-inline">
+          <li ng-repeat="document in explorerDocuments | filter:searchItem" >
+            <button ng-model="document" href="{{document}}" class="explorer-document btn btn-default">
+              <span class="glyphicon glyphicon-inbox"></span>
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Images -->
+      <div id="tab-explorer-images" class="tab-pane">
+        <ul id="list-of-images" class="list-inline">
+          <li ng-repeat="image in explorerImages | filter:searchItem" >
+            <div class="thumbnail explorer-image" ng-model="image">
+              <img src="{{image}}" alt="{{image}}">
+              <div class="caption">    
+                <p>
+                  <a href="{{image}}" target="_blank" role="button" title="{{image}}">
+                  Open Image
+                  </a> 
+                </p>
+              </div>
+            </div>
+          </li>
+        </ul>
+
+      </div>
+
+      <!-- Videos -->
+      <div id="tab-explorer-videos" class="tab-pane">
+        <ul id="list-of-videos" class="list-inline">
+          <li ng-repeat="video in explorerVideos | filter:searchItem" >
+            <button ng-model="link" href="{{video}}" class="explorer-link btn btn-default">
+              <span class="glyphicon glyphicon-film "></span>
+            </button>
+            <iframe width="200" height="200" src="{{video}}" frameborder="0" allowfullscreen></iframe>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Audios -->
+      <div id="tab-explorer-audios" class="tab-pane">
+        <ul id="list-of-songs" class="list-inline">
+          <li ng-repeat="song in explorerSongs | filter:searchItem" >
+            <button ng-model="link" href="{{song}}" class="explorer-song btn btn-default">
+              <span class="glyphicon glyphicon-music "></span>
+            </button>
+          </li>
+        </ul>
+      </div>
+
+     
+
+
+    </div>
+  </section>
+
+</article>
+
+
