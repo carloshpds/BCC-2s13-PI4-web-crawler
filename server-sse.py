@@ -20,16 +20,16 @@ class Root():
 		return serve_file(os.path.join(public_dir , 'index.html'), content_type='text/html')
 
 	@cherrypy.expose
-	def start(self):
+	def start(self, site):
 
-		#print(site)
+		cherrypy.request.headers["Content-Type"] = 'utf-8'
 
 		dao = CrawlerDAO()
+		print(cherrypy.url())
 
-		crawler = Crawler(dao)
-		# crawler.url = str("wwww.gizmodo.com.br")
+		crawler = Crawler(dao, 'http://' + site)
 		crawler.run()
-
+ 
 		#FINISHED CONNECTION
 		dao.connection.close()
 
@@ -46,7 +46,6 @@ class Root():
 
 			return "event: time\n" + "data: " + str(self.dao.select()) + "\n\n";
 
-
 		return content()
 
 	yieldResource._cp_config = {'response.stream' : True, 'tools.encode.encoding' : 'utf-8'}
@@ -60,6 +59,7 @@ if __name__ == '__main__':
 
 	conf = {
 			'/' : {
+			 	'tools.encode.encoding': 'utf-8',
 				'response.timeout' :  1000000,
 				'tools.staticdir.root': current_dir
 			},

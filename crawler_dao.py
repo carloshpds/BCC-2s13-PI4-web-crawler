@@ -37,7 +37,7 @@ class CrawlerDAO:
 		
 	def select(self):
 		
-		getJsonSQL  = "SELECT id, json FROM data WHERE visited = 'False' ORDER BY id DESC LIMIT 15"
+		getJsonSQL  = "SELECT id, json FROM data WHERE visited = 'False' ORDER BY id DESC LIMIT 5"
 		
 		self.crawler.execute(getJsonSQL)
 		datas = self.crawler.fetchall()

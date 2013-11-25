@@ -11,7 +11,9 @@ class DataExtractor:
 		self.path = ""
 		#LINKS OF RESOURCERS
 		self.visitedUrls   		= []
-	
+		self.visitedVideos   	= []
+		self.visitedDocuments = []
+
 		#Visited
 		self.visitedIframes = []
 
@@ -51,12 +53,9 @@ class DataExtractor:
 				data.broke = True
 
 		except UnicodeEncodeError as e :
-			print(e)
+
+			print(colored(e, 'red'))
 			data.broke = True
-			# print e.code
-			# print e.msg
-			# print e.headers
-			# print e.fp.read()
 
 		return data 
 			
@@ -91,6 +90,12 @@ class DataExtractor:
 			if containsPath and isVisited:
 				contentURLS.append(img)	
 
+
+		data = self.getIframes(DOMElementIframes)
+		if data is not None:
+			print(colored('[' + data.type +'] ' + data.url, 'red'))
+			return data
+
 		data = Data()
 		data.url = [path]
 		data.toCrawl = contentURLS
@@ -109,12 +114,22 @@ class DataExtractor:
 			if iframeSrc not in self.visitedIframes:
 				self.visitedIframes.append(iframeSrc)
 
+				data = Data()
+				data.url = iframeSrc
+				data.type = 'video/crawler'
+				
 				# Videos
 				hasType = self.getVideo(iframeSrc)
 
 				# Documents
-				if not hasType : hasType = self.getDocument(iframeSrc)
-				else: continue
+				if not hasType : 
+					hasType = self.getDocument(iframeSrc)
+					if hasType:
+						data.type = 'document/crawler'
+				else: 
+						return None
+
+				return data
 
 	def getVideo(self, src ):
 		print 'TRY - getVideo: ' + src
@@ -129,7 +144,6 @@ class DataExtractor:
 			if src not in selfVisited :
 				if target in src :
 					selfVisited.append(src)
-					#print('=================\nI FOUND SOMETHING: ' + src + '\n=================')
 					return True
 				
 			else:

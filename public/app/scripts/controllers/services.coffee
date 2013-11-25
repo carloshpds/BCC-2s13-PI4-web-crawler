@@ -163,6 +163,7 @@ angular.module('apiExplorerApp')
             )
             .error(
               (data, status, headers, config)->
+                do $scope.closeServerSentEvents
                 $scope.DOMELements.$formUrl.slideUp 'slow', =>
                   $scope.errorMessage = 'Status code: ' + status + ', Message: ' + data
                   $scope.DOMELements.$errorAlert.fadeIn 'slow'

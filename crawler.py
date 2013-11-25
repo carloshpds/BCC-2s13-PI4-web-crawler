@@ -9,9 +9,9 @@ from data_extractor import DataExtractor
 
 class Crawler():
 	
-	def __init__(self, crawlerDAO):
+	def __init__(self, crawlerDAO, site):
 
-		self.url = ""
+		self.url = site
 
 		self.crawlerDAO =  crawlerDAO
 		self.visited		= []
@@ -19,12 +19,9 @@ class Crawler():
 
 	def run(self):
 
-		#url = 'http://' + Resourcer.site
-		url = 'http://www.dclick.com.br'
-		#self.path = url
-		urls = [url]
+		urls = [self.url]
 
-		print(colored('INICIANDO CRAWLING NO SITE:' + url, 'green'))
+		print(colored('INICIANDO CRAWLING NO SITE:' + self.url, 'green'))
 		start = time.time()
 
 		self.search(urls)

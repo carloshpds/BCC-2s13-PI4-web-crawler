@@ -209,9 +209,6 @@
       <div id="tab-explorer-videos" class="tab-pane">
         <ul id="list-of-videos" class="list-inline">
           <li ng-repeat="video in explorerVideos | filter:searchItem" >
-            <button ng-model="link" href="{{video}}" class="explorer-link btn btn-default">
-              <span class="glyphicon glyphicon-film "></span>
-            </button>
             <iframe width="200" height="200" src="{{video}}" frameborder="0" allowfullscreen></iframe>
           </li>
         </ul>
