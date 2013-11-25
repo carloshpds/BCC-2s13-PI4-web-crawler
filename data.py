@@ -2,6 +2,7 @@ class Data(object):
 
 	def __init__(self):
 
+		self.title   = ""
 		self.url   	 = ""
 		self.toCrawl = []
 		self.type  	 = "text/html"

@@ -17,6 +17,8 @@ class DataExtractor:
 		#Visited
 		self.visitedIframes = []
 
+		self.skip = ['https', 'javascript', 'mailto']
+
 		#DOCUMENTS
 		self.targetTextFiles = []
 		self.targetDocuments = ['www.slideshare.net/slideshow/']
@@ -29,36 +31,45 @@ class DataExtractor:
 	def getData(self, url):
 		
 		data = Data()
-
 		try:
-			req = urllib2.Request(url, headers={'User-Agent' : "Magic Browser"})
-			request = urllib2.urlopen(req)
-			mime = request.info().getheader('Content-Type')		
-			code = request.code
+			try:
 
-			print(colored('[' + mime + '] ' + url, 'yellow'))
+				for target in self.skip:
+					if target in url:
+						return data
 
-			if code is 200:
-				if 'text/html' in mime:
+				req = urllib2.Request(url, headers={'User-Agent' : "Magic Browser"})
+				request = urllib2.urlopen(req)
+				mime = request.info().getheader('Content-Type')		
+				code = request.code
 
-					html = request.read()
-					data = self.parse(html, url)
-					
-				else:
-					#ANALYSIS TYPE
-					data.url = url
-					data.type = mime
+				print(colored('[' + mime + '] ' + url, 'yellow'))
 
-			elif code is 400:
-				data.broke = True
+				if code is 200:
+					if 'text/html' in mime:
 
-		except UnicodeEncodeError as e :
+						html = request.read()
+						data = self.parse(html, url)
+						
+					else:
+						#ANALYSIS TYPE
+						data.url = url
+						data.type = mime
 
-			print(colored(e, 'red'))
-			data.broke = True
+				elif code is 400:
+					data.broke = True
+
+			except UnicodeEncodeError as e :
+				self.messageError(e, data)
+		except urllib2.HTTPError, e:
+			self.messageError(e, data)
 
 		return data 
-			
+	
+	def messageError(self, e, data):
+		print(colored(e, 'red'))
+		data.broke = True
+
 	def parse(self, html, path):
 		
 		html = BeautifulSoup(html)
@@ -67,16 +78,6 @@ class DataExtractor:
 		DOMElementIframes = html.find_all('iframe', {"src" : True})
 
 		contentURLS = []
-
-		#Recupera todas as URLS
-		for url in DOMElementURL:
-			
-			url = urlparse.urljoin(path, url['href'])
-			containsPath = self.path in url
-			isVisited = url not in contentURLS 
-
-			if containsPath and isVisited:
-				contentURLS.append(url)
 
 		#Recupera todas as IMGS
 		for img in DOMElementImages:	
@@ -90,20 +91,29 @@ class DataExtractor:
 			if containsPath and isVisited:
 				contentURLS.append(img)	
 
+		#Recupera todas as URLS
+		for url in DOMElementURL:
+			
+			url = urlparse.urljoin(path, url['href'])
+			containsPath = self.path in url
+			isVisited = url not in contentURLS 
 
-		data = self.getIframes(DOMElementIframes)
-		if data is not None:
-			print(colored('[' + data.type +'] ' + data.url, 'red'))
-			return data
+			if containsPath and isVisited:
+				contentURLS.append(url)
+
+		#iframe = self.getIframes(DOMElementIframes)
 
 		data = Data()
-		data.url = [path]
-		data.toCrawl = contentURLS
 
+		title = ""
+		if html.title is not None:
+			title = html.title.string
+
+		data.title   = title
+		data.url 	 	 = path
+		data.toCrawl = contentURLS 
+		
 		return data
-
-	#def analysis(self):
-
 
 	def getIframes(self, DOMElementIframes):
 		
@@ -127,7 +137,7 @@ class DataExtractor:
 					if hasType:
 						data.type = 'document/crawler'
 				else: 
-						return None
+					return None
 
 				return data
 
