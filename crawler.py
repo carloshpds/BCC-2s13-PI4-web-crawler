@@ -49,8 +49,7 @@ class Crawler():
 					data = self.extractor.getData(url)
 			
 					#Adiciona novas URLS achadas no processo de getData.
-					urls = urls + data.toCrawl
-					data.toCrawl = []
+					urls = urls + data.urls
 
 					#Sync com o client novas informacoes.
 					self.sync(data)

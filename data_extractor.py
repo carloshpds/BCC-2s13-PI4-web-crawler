@@ -101,14 +101,14 @@ class DataExtractor:
 			#PROCURA POR VIDEOS
 			for target in self.targetVideos:
 				containsTarget = target in iframeSrc
-				contentVid.append(iframSrc)
+				contentVid.append(iframeSrc)
 				self.visitedVideos.append(iframeSrc)
 
 			#PROCURA POR DOCS
 			for target in self.targetDocuments:	
 				containsTarget = target in iframeSrc
-				contentDoc.append(iframSrc)
-				self.visitedDoc.append(iframeSrc)
+				contentDoc.append(iframeSrc)
+				self.visitedDocuments.append(iframeSrc)
 
 		data = Data()
 		data.url  = [path]

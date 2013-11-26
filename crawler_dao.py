@@ -17,7 +17,7 @@ class CrawlerDAO:
 
 	def reset(self):
 
-		sql = 'DROP TABLE IF EXISTS data'
+		sql = 'DROP TABLE IF EXISTS data' 
 		self.crawler.execute(sql)
 		self.createDataTable()
 
@@ -25,6 +25,7 @@ class CrawlerDAO:
 
 		query = 'CREATE TABLE data (id INTEGER PRIMARY KEY, json TEXT, time TEXT, visited TEXT)'
 		self.crawler.execute(query)
+
 
 	def insertDataJSON(self, json):
 
@@ -40,17 +41,22 @@ class CrawlerDAO:
 		
 	def select(self):
 
-			getJsonSQL  = "SELECT id, json FROM data WHERE visited = 'False' ORDER BY id LIMIT 1"
+			getJsonSQL  = "SELECT id, json FROM data WHERE visited = 'False' ORDER BY time DESC LIMIT 1"
+			#getJsonSQL  = "SELECT id, json FROM data WHERE visited = 'False' ORDER BY time "
 			
 			self.crawler.execute(getJsonSQL)
-			datas = self.crawler.fetchone()
+			json = self.crawler.fetchone()
 
-			dataId 	 = data[0]
-			dataJson = data[1]
 
-			print(colored('[LOG] SYNC TIME OBJETO ' + str(dataId) + '.', 'green'))
+			if json is not None:
+				print(colored(json, 'red'))
+				jsonId 	 = json[0]
+				jsonDATA = json[1]
 
-			self.crawler.executem("UPDATE data SET visited = 'True' WHERE id = ?", (dataId,))
-			self.connection.commit()
-			
-			return dataJson
+				#print(colored('[LOG] SYNC TIME OBJETO ' + str(jsonId) + '.', 'green'))
+
+				self.crawler.execute("UPDATE data SET visited = 'True' WHERE id = ?", (jsonId,))
+				self.connection.commit()	
+				return jsonDATA
+			else:
+				return None

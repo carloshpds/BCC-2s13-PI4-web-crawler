@@ -40,9 +40,9 @@ class Root():
 
 		def content():
 
-			# #Server time poooling
-			# for pooling in xrange(0, 5):
-			# 	time.sleep(1)
+			#Server time poooling
+			for pooling in xrange(0, 5):
+				time.sleep(1)
 
 			return "event: time\n" + "data: " + str(self.dao.select()) + "\n\n";
 
