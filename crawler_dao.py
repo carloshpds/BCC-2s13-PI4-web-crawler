@@ -47,11 +47,10 @@ class CrawlerDAO:
 			json = self.crawler.fetchone()
 
 			if json is not None:
-				#print(colored(json, 'red'))
 				jsonId 	 = json[0]
 				jsonDATA = json[1]
 
-				#print(colored('[LOG] SYNC TIME OBJETO ' + str(jsonId) + '.', 'green'))
+				print(colored('[LOG] SYNC TIME OBJETO ' + str(jsonId) + '.', 'green'))
 
 				self.crawler.execute("UPDATE data SET visited = 'True' WHERE id = ?", (jsonId,))
 				self.connection.commit()	
