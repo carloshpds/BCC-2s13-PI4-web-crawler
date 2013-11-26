@@ -30,14 +30,14 @@ class DataExtractor:
 	def getData(self, url):
 		
 		data = Data()
-
 		try:
+			
 			req = urllib2.Request(url, headers={'User-Agent' : "Magic Browser"})
 			request = urllib2.urlopen(req)
 			mime = request.info().getheader('Content-Type')		
 			code = request.code
 
-			print(colored('[' + mime + '] ' + url, 'yellow'))
+			#print(colored('[' + mime + '] ' + url, 'yellow'))
 
 			if code is 200:
 				if 'text/html' in mime:
@@ -52,13 +52,24 @@ class DataExtractor:
 
 			elif code is 400:
 				data.broke = True
-
-		except UnicodeEncodeError as e :
-
-			print(colored(e, 'red'))
+		
+		except urllib2.HTTPError as e:
+			self.messageError(e)
 			data.broke = True
-
+		except UnicodeEncodeError as e :
+			self.messageError(e)
+			data.broke = True
+		except ValueError as e:
+			self.messageError(e)
+			data.broke = True
+		except URLError as e:
+			self.messageError(e)
+			data.broke = True
+	
 		return data 
+
+	def messageError(self, e):
+		print(colored(e, 'red'))
 			
 	def parse(self, html, path):
 		
@@ -101,14 +112,18 @@ class DataExtractor:
 			#PROCURA POR VIDEOS
 			for target in self.targetVideos:
 				containsTarget = target in iframeSrc
-				contentVid.append(iframeSrc)
-				self.visitedVideos.append(iframeSrc)
+				if containsTarget:
+					print(colored('VIDEO :' +iframeSrc, 'red'))
+					contentVid.append(iframeSrc)
+					self.visitedVideos.append(iframeSrc)
 
 			#PROCURA POR DOCS
 			for target in self.targetDocuments:	
 				containsTarget = target in iframeSrc
-				contentDoc.append(iframeSrc)
-				self.visitedDocuments.append(iframeSrc)
+				if containsTarget:
+					print(colored('DOCUMENT: ' + iframeSrc, 'red'))
+					contentDoc.append(iframeSrc)
+					self.visitedDocuments.append(iframeSrc)
 
 		data = Data()
 		data.url  = [path]
@@ -119,25 +134,24 @@ class DataExtractor:
 
 		return data
 
-	#def analysis(self):
 
-	def getIframes(self, DOMElementIframes):
+	# def getIframes(self, DOMElementIframes):
 		
-		for iframe in DOMElementIframes :         
+	# 	for iframe in DOMElementIframes :         
 			
-			iframeSrc = str(iframe["src"])
-			hasType = False
+	# 		iframeSrc = str(iframe["src"])
+	# 		hasType = False
 
-			if iframeSrc not in self.visitedIframes:
-				self.visitedIframes.append(iframeSrc)
+	# 		if iframeSrc not in self.visitedIframes:
+	# 			self.visitedIframes.append(iframeSrc)
 				
-				# Videos
-				hasType = self.getVideo(iframeSrc)
+	# 			# Videos
+	# 			hasType = self.getVideo(iframeSrc)
 
-				# Documents
-				if not hasType : 
-					hasType = self.getDocument(iframeSrc)
-				else: continue
+	# 			# Documents
+	# 			if not hasType : 
+	# 				hasType = self.getDocument(iframeSrc)
+	# 			else: continue
 
 	# def getVideo(self, src, content ):
 	# 	print 'TRY - getVideo: ' + src

@@ -13,7 +13,7 @@ class Crawler():
 
 		self.url = site
 
-		self.crawlerDAO =  crawlerDAO
+		self.crawlerDAO = crawlerDAO
 		self.visited		= []
 		self.extractor  = DataExtractor()
 
