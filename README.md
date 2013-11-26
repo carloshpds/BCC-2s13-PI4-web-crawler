@@ -4,17 +4,26 @@
 ## Install Dependencies
 
 ```
+pip install CherryPy
+pip install pysqlite
 sudo pip install termcolor
-sudo brew install libevent
-sudo easy_install greenlet
-sudo easy_install gevent 
+pip install beautifulsoup4
 ```
 
 - Parser library beautifulsoup4:
 ```
--pip install beautifulsoup4
+pip install beautifulsoup4
 ```
  
+- NodeJS
+```
+http://nodejs.org/
+```
+- GruntJS
+```
+npm install -g grunt-cli
+```
+
 ### Public Directory 
 - NPM dependencies (package.json):
 ```

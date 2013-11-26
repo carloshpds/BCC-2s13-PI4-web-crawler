@@ -31,23 +31,24 @@
   text-align: center;
   font-size: 30px;
   overflow: hidden;
+  background-color: transparent;
 }
-/* line 40, ../../sass/services/services.sass */
+/* line 41, ../../sass/services/services.sass */
 #explorer-view #api-core-container .objective-illustration li {
   width: 400px;
   min-height: 100px;
   padding: 0;
   margin: 1px;
 }
-/* line 47, ../../sass/services/services.sass */
+/* line 48, ../../sass/services/services.sass */
 #explorer-view #api-core-container #api-core-header {
   padding: 15px;
 }
-/* line 50, ../../sass/services/services.sass */
+/* line 51, ../../sass/services/services.sass */
 #explorer-view #api-core-container #api-core {
   margin-top: 15px;
 }
-/* line 61, ../../sass/services/services.sass */
+/* line 62, ../../sass/services/services.sass */
 #explorer-view #api-core-container #api-core #list-of-links li,
 #explorer-view #api-core-container #api-core #list-of-texts li,
 #explorer-view #api-core-container #api-core #list-of-images li,
@@ -57,7 +58,7 @@
 #explorer-view #api-core-container #api-core #list-of-ebooks li {
   padding: 13px;
 }
-/* line 64, ../../sass/services/services.sass */
+/* line 65, ../../sass/services/services.sass */
 #explorer-view #api-core-container #api-core .explorer-link,
 #explorer-view #api-core-container #api-core .explorer-document,
 #explorer-view #api-core-container #api-core .explorer-image,
@@ -68,14 +69,14 @@
   display: block;
   text-overflow: ellipsis;
 }
-/* line 73, ../../sass/services/services.sass */
+/* line 74, ../../sass/services/services.sass */
 #explorer-view #api-core-container #api-core .explorer-link span,
 #explorer-view #api-core-container #api-core .explorer-document span,
 #explorer-view #api-core-container #api-core .explorer-image span,
 #explorer-view #api-core-container #api-core .explorer-song span {
   font-size: 50px;
 }
-/* line 75, ../../sass/services/services.sass */
+/* line 76, ../../sass/services/services.sass */
 #explorer-view #api-core-container #api-core .explorer-link img,
 #explorer-view #api-core-container #api-core .explorer-document img,
 #explorer-view #api-core-container #api-core .explorer-image img,
