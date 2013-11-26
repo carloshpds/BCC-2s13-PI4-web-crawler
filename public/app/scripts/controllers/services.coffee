@@ -88,7 +88,8 @@ angular.module('apiExplorerApp')
         console.log 'something wrong happened'
 
     $scope.closeServerSentEvents = =>
-      do $scope.timeSrc.close
+      if $scope.timeSrc
+        do $scope.timeSrc.close
 
     ## Logical Methods
     #=====================================
@@ -100,26 +101,33 @@ angular.module('apiExplorerApp')
 
       # Images
       for image in json.images
-        $scope.explorerImages
+        $scope.explorerImages.push image
 
       # Videos
       for video in json.videos
-        $scope.explorerVideos
+        $scope.explorerVideos.push video
 
       # Documents
       for doc in json.documents
         $scope.explorerDocuments.push doc
-      
+
 
         
     
     $scope.loadUrl = ()->
-      if not _.isEmpty( $scope.DOMELements.$urlInput.val())
+      if not _.isEmpty( $scope.DOMELements.$urlInput.val()) 
         $scope.illustration = false
-
         $scope.DOMELements.$formUrl.slideUp 'fast', =>
           $scope.DOMELements.$loading.slideDown 'slow', =>
-            
+          
+            if $scope.url.substring(0,7) is "http://" 
+              $scope.url = _.toArray($scope.url)
+              $scope.url.splice(0,7)
+              aux = $scope.url
+              $scope.url = []
+              for char in aux
+                $scope.url += char
+
             do $scope.openServerEvents
             FactoryRequest.get($scope.url)
             .success( (data, status, headers, config) ->   
@@ -183,7 +191,7 @@ angular.module('apiExplorerApp')
         url: 'start'
         method:'GET'
         params:
-          site: '' + site + ''
+          site: site
 
 
 
