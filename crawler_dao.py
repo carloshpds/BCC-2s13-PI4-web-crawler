@@ -1,11 +1,16 @@
 import sqlite3 
 import json
 from termcolor import colored
+from data import Data
 from time import gmtime, strftime
 
 class CrawlerDAO:
 
 	def __init__(self):
+
+		self.visited = []
+		
+		self.queueSync = []
 
 		self.connection = sqlite3.connect('crawler.db', check_same_thread=False)
 		self.crawler = self.connection.cursor()
@@ -19,9 +24,7 @@ class CrawlerDAO:
 	def createDataTable(self):
 
 		query = 'CREATE TABLE data (id INTEGER PRIMARY KEY, json TEXT, time TEXT, visited TEXT)'
-
 		self.crawler.execute(query)
-
 
 	def insertDataJSON(self, json):
 
@@ -36,27 +39,18 @@ class CrawlerDAO:
 
 		
 	def select(self):
-		
-		getJsonSQL  = "SELECT id, json FROM data WHERE visited = 'False' ORDER BY id DESC LIMIT 5"
-		
-		self.crawler.execute(getJsonSQL)
-		datas = self.crawler.fetchall()
 
-		idsToUpdate	   = []
-		jsonToRetrieve = []
+			getJsonSQL  = "SELECT id, json FROM data WHERE visited = 'False' ORDER BY id LIMIT 1"
+			
+			self.crawler.execute(getJsonSQL)
+			datas = self.crawler.fetchone()
 
-		for data in datas:
-			dataId = data[0]
+			dataId 	 = data[0]
 			dataJson = data[1]
-
-			idsToUpdate.append(dataId)
-			jsonToRetrieve.append(json.loads(dataJson))
 
 			print(colored('[LOG] SYNC TIME OBJETO ' + str(dataId) + '.', 'green'))
 
-		self.crawler.executemany("UPDATE data SET visited = 'True' WHERE id = ?", 	((dataId,) for dataIds in idsToUpdate))
-		self.connection.commit()
-		
-		data = json.dumps([dict(data=pn) for pn in jsonToRetrieve])
-		return data
-
+			self.crawler.executem("UPDATE data SET visited = 'True' WHERE id = ?", (dataId,))
+			self.connection.commit()
+			
+			return dataJson

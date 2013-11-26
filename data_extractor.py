@@ -10,9 +10,10 @@ class DataExtractor:
 
 		self.path = ""
 		#LINKS OF RESOURCERS
-		self.visitedUrls   		= []
-		self.visitedVideos   	= []
-		self.visitedDocuments = []
+		self.visitedUrls   			= []
+		self.visitedImages     	= []
+		self.visitedVideos   		= []
+		self.visitedDocuments 	= []
 
 		#Visited
 		self.visitedIframes = []
@@ -66,57 +67,69 @@ class DataExtractor:
 		DOMElementImages  = html.find_all('img', { "src" : True } )
 		DOMElementIframes = html.find_all('iframe', {"src" : True})
 
-		contentURLS = []
-
+		contentUrl  = []
+		contentImg  = []
+		contentVid  = []
+		contentDoc  = []
+ 
 		#Recupera todas as URLS
 		for url in DOMElementURL:
 			
 			url = urlparse.urljoin(path, url['href'])
 			containsPath = self.path in url
-			isVisited = url not in contentURLS 
+			isVisited = url not in self.visitedUrls 
 
 			if containsPath and isVisited:
-				contentURLS.append(url)
+				contentUrl.append(url)
 
 		#Recupera todas as IMGS
 		for img in DOMElementImages:	
 			
-			img = img['src']	
-			img = urlparse.urljoin(path, img)
+			img = urlparse.urljoin(path, img['src'])
 
 			containsPath = self.path in img
-			isVisited  = img not in contentURLS
+			isVisited  = img not in self.visitedImages
 
 			if containsPath and isVisited:
-				contentURLS.append(img)	
+				contentImg.append(img)
+				self.visitedImages.append(img)	
 
+		#PROCURA ESPECIAL
+		for iframe in DOMElementIframes :         
+			iframeSrc = str(iframe["src"])
 
-		data = self.getIframes(DOMElementIframes)
-		if data is not None:
-			print(colored('[' + data.type +'] ' + data.url, 'red'))
-			return data
+			#PROCURA POR VIDEOS
+			for target in self.targetVideos:
+				containsTarget = target in iframeSrc
+				contentVid.append(iframSrc)
+				self.visitedVideos.append(iframeSrc)
+
+			#PROCURA POR DOCS
+			for target in self.targetDocuments:	
+				containsTarget = target in iframeSrc
+				contentDoc.append(iframSrc)
+				self.visitedDoc.append(iframeSrc)
 
 		data = Data()
-		data.url = [path]
-		data.toCrawl = contentURLS
+		data.url  = [path]
+		data.urls = contentUrl
+		data.img  = contentImg
+		data.doc  = contentDoc
+		data.vid  = contentVid
 
 		return data
 
 	#def analysis(self):
 
-
 	def getIframes(self, DOMElementIframes):
 		
 		for iframe in DOMElementIframes :         
+			
 			iframeSrc = str(iframe["src"])
-			hasType   = False
+			hasType = False
 
 			if iframeSrc not in self.visitedIframes:
 				self.visitedIframes.append(iframeSrc)
-
-				data = Data()
-				data.url = iframeSrc
-				data.type = 'video/crawler'
 				
 				# Videos
 				hasType = self.getVideo(iframeSrc)
@@ -124,27 +137,22 @@ class DataExtractor:
 				# Documents
 				if not hasType : 
 					hasType = self.getDocument(iframeSrc)
-					if hasType:
-						data.type = 'document/crawler'
-				else: 
-						return None
+				else: continue
 
-				return data
+	# def getVideo(self, src, content ):
+	# 	print 'TRY - getVideo: ' + src
+	# 	return self.getSomething(src,self.targetVideos,self.visitedVideos)
 
-	def getVideo(self, src ):
-		print 'TRY - getVideo: ' + src
-		return self.getSomething(src,self.targetVideos,self.visitedVideos)
+	# def getDocument(self, src):
+	# 	print 'TRY - getDocument: ' + src
+	# 	return self.getSomething(src,self.targetDocuments,self.visitedDocuments)
 
-	def getDocument(self, src):
-		print 'TRY - getDocument: ' + src
-		return self.getSomething(src,self.targetDocuments,self.visitedDocuments)
-
-	def getSomething(self, src, selfTarget, selfVisited  ):
-		for target in selfTarget:
-			if src not in selfVisited :
-				if target in src :
-					selfVisited.append(src)
-					return True
+	# def getSomething(self, src, selfTarget, selfVisited  ):
+	# 	for target in selfTarget:
+	# 		if src not in selfVisited :
+	# 			if target in src :
+	# 				selfVisited.append(src)
+	# 				return True
 				
-			else:
-				return True
+	# 		else:
+	# 			return True
