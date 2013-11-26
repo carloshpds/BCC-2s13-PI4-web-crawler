@@ -42,14 +42,12 @@ class CrawlerDAO:
 	def select(self):
 
 			getJsonSQL  = "SELECT id, json FROM data WHERE visited = 'False' ORDER BY time DESC LIMIT 1"
-			#getJsonSQL  = "SELECT id, json FROM data WHERE visited = 'False' ORDER BY time "
 			
 			self.crawler.execute(getJsonSQL)
 			json = self.crawler.fetchone()
 
-
 			if json is not None:
-				print(colored(json, 'red'))
+				#print(colored(json, 'red'))
 				jsonId 	 = json[0]
 				jsonDATA = json[1]
 
