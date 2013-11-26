@@ -112,10 +112,10 @@ class DataExtractor:
 
 		data = Data()
 		data.url  = [path]
-		data.urls = contentUrl
-		data.img  = contentImg
-		data.doc  = contentDoc
-		data.vid  = contentVid
+		data.urls 	 = contentUrl
+		data.images  = contentImg
+		data.documents = contentDoc
+		data.vidideos  = contentVid
 
 		return data
 
