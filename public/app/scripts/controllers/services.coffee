@@ -18,37 +18,6 @@ angular.module('apiExplorerApp')
     $scope.explorerSongs        = []
     $scope.searchResultsLength  = 0
 
-    $scope.explorerLinksTargets       = ['text/html']
-    $scope.explorerImagesTargets      = [
-      'image/bmp' 
-      'image/cgm' 
-      'image/vnd.djvu' 
-      'image/gif' 
-      'image/x-icon' 
-      'image/ief' 
-      'image/jp2' 
-      'image/jpeg' 
-      'image/x-macpaint'
-      'image/x-portable-bitmap'
-      'image/pict'
-      'image/png'
-      'image/x-portable-anymap'
-    ]
-    $scope.explorerTextFilesTargets   = []
-    $scope.explorerDocumentsTargets   = ['documento/crawler']
-    $scope.explorerVideosTargets      = [
-      'video/crawler'
-      'video/x-msvideo' 
-      'video/x-dv' 
-      'video/x-m4v' 
-      'video/quicktime' 
-      'video/x-sgi-movie' 
-      'video/mp4' 
-      'video/mpeg'
-      'video/vnd.mpegurl' 
-    ]
-    $scope.explorerSongsTargets       = []
-
     $scope.errorMessage  = 'Some error has appeared'
     $scope.illustration  = true
 
@@ -124,29 +93,25 @@ angular.module('apiExplorerApp')
     ## Logical Methods
     #=====================================
     $scope.addItems = (json) =>
-      for data in json
-        hasType = false
 
-        hasType = $scope.getLink(data)
+      # Urls
+      for url in json.urls
+        $scope.explorerLinks.push url
 
-        if not hasType then $scope.getImage(data) else continue
-        if not hasType then $scope.getVideo(data) else continue
+      # Images
+      for image in json.images
+        $scope.explorerImages
 
-    $scope.getLink = (json) =>
-      $scope.getSomething json, $scope.explorerLinksTargets, $scope.explorerLinks
+      # Videos
+      for video in json.videos
+        $scope.explorerVideos
 
-    $scope.getImage = (json) =>
-      $scope.getSomething json, $scope.explorerImagesTargets, $scope.explorerImages
+      # Documents
+      for doc in json.documents
+        $scope.explorerDocuments.push doc
+      
 
-    $scope.getVideo = (json) =>
-      $scope.getSomething json, $scope.explorerVideosTargets, $scope.explorerVideos
-
-    $scope.getSomething = (json, selfTargets, attribute ) =>
-      for target in selfTargets
-        if target is json.data.type
-          url = if _.isArray(json.data.url) then json.data.url[0] else json.data.url
-          attribute.push(url)
-          return true
+        
     
     $scope.loadUrl = ()->
       if not _.isEmpty( $scope.DOMELements.$urlInput.val())
