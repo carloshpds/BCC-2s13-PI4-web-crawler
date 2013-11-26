@@ -218,7 +218,7 @@ angular.module('apiExplorerApp')
         url: 'start'
         method:'GET'
         params:
-          site: site
+          site: '' + site + ''
 
 
 
