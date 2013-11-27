@@ -62,7 +62,7 @@ class DataExtractor:
 		except ValueError as e:
 			self.messageError(e)
 			data.broke = True
-		except URLError as e:
+		except urllib2.URLError as e:
 			self.messageError(e)
 			data.broke = True
 	
