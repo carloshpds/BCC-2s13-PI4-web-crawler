@@ -110,10 +110,6 @@
                 <span class="glyphicon glyphicon-link"></span><br />
                 <strong>{{explorerLinks.length}}</strong> Links
               </li>
-              <li ng-model="explorerTextFiles" class="well">
-                <span class="glyphicon glyphicon-list-alt"></span><br />
-                <strong>{{explorerTextFiles.length}}</strong> Text files
-              </li>
               <li ng-model="explorerDocuments" class="well">
                 <span class="glyphicon glyphicon-inbox"></span><br />
                 <strong>{{explorerDocuments.length}}</strong> Documents
@@ -125,10 +121,6 @@
               <li ng-model="explorerVideos" class="well">
                 <span class="glyphicon glyphicon-film "></span><br />
                 <strong>{{explorerVideos.length}}</strong> Videos
-              </li>
-              <li ng-model="explorerSongs" class="well">
-                <span class="glyphicon glyphicon-music "></span><br />
-                <strong>{{explorerSongs.length}}</strong> Songs
               </li>
             </ul>
           </div>
@@ -146,26 +138,12 @@
           </li>
         </ul>
       </div>
-      
-
-      <!-- Texts -->
-      <div id="tab-explorer-texts" class="tab-pane">
-        <ul id="list-of-texts" class="list-inline">
-          <li ng-repeat="link in explorerTextFiles | filter:searchItem" >
-            <button ng-model="link" href="{{link.href}}" class="explorer-link btn btn-default">
-              <span class="glyphicon glyphicon-list-alt"></span>
-            </button>
-          </li>
-        </ul>
-      </div>
 
       <!-- Documents -->
       <div id="tab-explorer-documents" class="tab-pane">
         <ul id="list-of-documents" class="list-inline">
           <li ng-repeat="document in explorerDocuments | filter:searchItem" >
-            <button ng-model="document" href="{{document}}" class="explorer-document btn btn-default">
-              <span class="glyphicon glyphicon-inbox"></span>
-            </button>
+            <iframe ng-model="document" width="200" height="200" src="{{document}}" frameborder="0" allowfullscreen></iframe>
           </li>
         </ul>
       </div>
@@ -193,25 +171,10 @@
       <div id="tab-explorer-videos" class="tab-pane">
         <ul id="list-of-videos" class="list-inline">
           <li ng-repeat="video in explorerVideos | filter:searchItem" >
-            <iframe width="200" height="200" src="{{video}}" frameborder="0" allowfullscreen></iframe>
+            <iframe ng-model="video" width="200" height="200" src="{{video}}" frameborder="0" allowfullscreen></iframe>
           </li>
         </ul>
       </div>
-
-      <!-- Audios -->
-      <div id="tab-explorer-audios" class="tab-pane">
-        <ul id="list-of-songs" class="list-inline">
-          <li ng-repeat="song in explorerSongs | filter:searchItem" >
-            <button ng-model="link" href="{{song}}" class="explorer-song btn btn-default">
-              <span class="glyphicon glyphicon-music "></span>
-            </button>
-          </li>
-        </ul>
-      </div>
-
-     
-
-
     </div>
   </section>
 
