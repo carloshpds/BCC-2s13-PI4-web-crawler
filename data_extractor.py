@@ -37,7 +37,7 @@ class DataExtractor:
 			mime = request.info().getheader('Content-Type')		
 			code = request.code
 
-			#print(colored('[' + mime + '] ' + url, 'yellow'))
+			print(colored('[' + mime + '] ' + url, 'yellow'))
 
 			if code is 200:
 				if 'text/html' in mime:
@@ -62,7 +62,7 @@ class DataExtractor:
 		except ValueError as e:
 			self.messageError(e)
 			data.broke = True
-		except URLError as e:
+		except urllib2.URLError as e:
 			self.messageError(e)
 			data.broke = True
 	

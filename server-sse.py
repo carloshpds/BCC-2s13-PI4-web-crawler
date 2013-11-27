@@ -25,7 +25,7 @@ class Root():
 		cherrypy.request.headers["Content-Type"] = 'utf-8'
 
 		dao = CrawlerDAO()
-		print(cherrypy.url())
+		dao.reset()
 
 		crawler = Crawler(dao, 'http://' + site)
 		crawler.run()
@@ -53,7 +53,6 @@ class Root():
 if __name__ == '__main__':
 
 	dao = CrawlerDAO()	
-	dao.reset()
 		
 	pageroot = Root()
 
