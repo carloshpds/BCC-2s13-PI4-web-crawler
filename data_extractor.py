@@ -9,6 +9,8 @@ class DataExtractor:
 	def __init__(self):
 
 		self.path = ""
+		self.actualURL = ""
+
 		#LINKS OF RESOURCERS
 		self.visitedUrls   			= []
 		self.visitedImages     	= []
@@ -22,7 +24,7 @@ class DataExtractor:
 		self.targetTextFiles = []
 		self.targetDocuments = ['www.slideshare.net/slideshow/']
 		self.targetImages    = []
-		self.targetVideos    = ['www.youtube.com', 'player.vimeo.com/video' ]
+		self.targetVideos    = ['www.youtube.com', 'player.vimeo.com/video', 'youtube', 'vimeo' ]
 		self.targetAudios    = []
 		self.targetEbooks    = []
 
@@ -72,38 +74,65 @@ class DataExtractor:
 		print(colored(e, 'red'))
 			
 	def parse(self, html, path):
-		
+
+		self.actualURL = path
+
 		html = BeautifulSoup(html)
 		DOMElementURL 	  = html.find_all('a', href=True)
 		DOMElementImages  = html.find_all('img', { "src" : True } )
 		DOMElementIframes = html.find_all('iframe', {"src" : True})
 
+		data = Data()
+		data.url  		 = [path]
+		data.urls 	   = self.getUrls(DOMElementURL)
+		data.images    = self.getImages(DOMElementImages)
+
+		iframe = self.getDocuments(DOMElementIframes)
+
+		if iframe is not None:
+			data.documents = iframe['documents']
+			data.videos  	 = iframe['videos']
+
+		return data
+
+	def getUrls(self, DOMElementURL):
+
 		contentUrl  = []
-		contentImg  = []
-		contentVid  = []
-		contentDoc  = []
- 
+		
 		#Recupera todas as URLS
 		for url in DOMElementURL:
 			
-			url = urlparse.urljoin(path, url['href'])
-			containsPath = self.path in url
+			url = urlparse.urljoin(self.actualURL, url['href'])
+			containsPath = self.path in url 
 			isVisited = url not in self.visitedUrls 
 
 			if containsPath and isVisited:
 				contentUrl.append(url)
 
+		return contentUrl
+
+	def getImages(self, DOMElementImages):
+
+		contentImg  = []
+	
 		#Recupera todas as IMGS
 		for img in DOMElementImages:	
 			
-			img = urlparse.urljoin(path, img['src'])
+			img = urlparse.urljoin(self.actualURL, img['src'])
 
 			containsPath = self.path in img
 			isVisited  = img not in self.visitedImages
 
 			if containsPath and isVisited:
 				contentImg.append(img)
-				self.visitedImages.append(img)	
+				self.visitedImages.append(img)
+
+		return contentImg
+
+	def getDocuments(self, DOMElementIframes):
+		
+		contentVid  = [] 
+		contentDoc  = []
 
 		#PROCURA ESPECIAL
 		for iframe in DOMElementIframes :         
@@ -111,62 +140,22 @@ class DataExtractor:
 
 			#PROCURA POR VIDEOS
 			for target in self.targetVideos:
-				containsTarget = target in iframeSrc
-				if containsTarget:
-					print(colored('VIDEO :' +iframeSrc, 'red'))
+				if target in iframeSrc:
+					print(colored('VIDEO :' + iframeSrc, 'red'))
 					contentVid.append(iframeSrc)
 					self.visitedVideos.append(iframeSrc)
 
 			#PROCURA POR DOCS
 			for target in self.targetDocuments:	
-				containsTarget = target in iframeSrc
-				if containsTarget:
-					print(colored('DOCUMENT: ' + iframeSrc, 'red'))
-					contentDoc.append(iframeSrc)
-					self.visitedDocuments.append(iframeSrc)
+				# if target in iframeSrc:
+				print(colored('DOCUMENT: ' + iframeSrc, 'red'))
+				contentDoc.append(iframeSrc)
+				self.visitedDocuments.append(iframeSrc)
 
-		data = Data()
-		data.url  = [path]
-		data.urls 	 = contentUrl
-		data.images  = contentImg
-		data.documents = contentDoc
-		data.vidideos  = contentVid
+		data = {
+			'videos' : contentVid,
+			'documents' : contentDoc
+		}
 
 		return data
 
-
-	# def getIframes(self, DOMElementIframes):
-		
-	# 	for iframe in DOMElementIframes :         
-			
-	# 		iframeSrc = str(iframe["src"])
-	# 		hasType = False
-
-	# 		if iframeSrc not in self.visitedIframes:
-	# 			self.visitedIframes.append(iframeSrc)
-				
-	# 			# Videos
-	# 			hasType = self.getVideo(iframeSrc)
-
-	# 			# Documents
-	# 			if not hasType : 
-	# 				hasType = self.getDocument(iframeSrc)
-	# 			else: continue
-
-	# def getVideo(self, src, content ):
-	# 	print 'TRY - getVideo: ' + src
-	# 	return self.getSomething(src,self.targetVideos,self.visitedVideos)
-
-	# def getDocument(self, src):
-	# 	print 'TRY - getDocument: ' + src
-	# 	return self.getSomething(src,self.targetDocuments,self.visitedDocuments)
-
-	# def getSomething(self, src, selfTarget, selfVisited  ):
-	# 	for target in selfTarget:
-	# 		if src not in selfVisited :
-	# 			if target in src :
-	# 				selfVisited.append(src)
-	# 				return True
-				
-	# 		else:
-	# 			return True

@@ -16,7 +16,6 @@ class Root():
 		
 	@cherrypy.expose
 	def index(self):
-		#return serve_file(os.path.join(current_dir, 'index.html'), content_type='text/html')
 		return serve_file(os.path.join(public_dir , 'index.html'), content_type='text/html')
 
 	@cherrypy.expose
