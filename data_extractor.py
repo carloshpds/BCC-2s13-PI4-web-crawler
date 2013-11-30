@@ -156,8 +156,5 @@ class DataExtractor:
 			'documents' : contentDoc
 		}
 
-		print(colored('DOCUMENT: ' + contentVid, 'red'))
-					
-
 		return data
 
