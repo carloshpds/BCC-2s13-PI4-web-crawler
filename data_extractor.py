@@ -79,13 +79,13 @@ class DataExtractor:
 
 		html = BeautifulSoup(html)
 		DOMElementURL 	  = html.find_all('a', href=True)
-		DOMElementImages  = html.find_all('img', { "src" : True } )
+		DOMElementImages  = html.find_all('img', { "src" : True })
 		DOMElementIframes = html.find_all('iframe', {"src" : True})
 
 		data = Data()
-		data.url  		 = [path]
-		data.urls 	   = self.getUrls(DOMElementURL)
-		data.images    = self.getImages(DOMElementImages)
+		data.url  	= [path]
+		data.urls 	= self.getUrls(DOMElementURL)
+		data.images = self.getImages(DOMElementImages)
 
 		iframe = self.getDocuments(DOMElementIframes)
 
@@ -119,7 +119,6 @@ class DataExtractor:
 		for img in DOMElementImages:	
 			
 			img = urlparse.urljoin(self.actualURL, img['src'])
-
 			containsPath = self.path in img
 			isVisited  = img not in self.visitedImages
 
@@ -141,21 +140,24 @@ class DataExtractor:
 			#PROCURA POR VIDEOS
 			for target in self.targetVideos:
 				if target in iframeSrc:
-					print(colored('VIDEO :' + iframeSrc, 'red'))
+					print(colored('VIDEO :' + iframeSrc, 'red')) 
 					contentVid.append(iframeSrc)
 					self.visitedVideos.append(iframeSrc)
 
 			#PROCURA POR DOCS
 			for target in self.targetDocuments:	
-				# if target in iframeSrc:
-				print(colored('DOCUMENT: ' + iframeSrc, 'red'))
-				contentDoc.append(iframeSrc)
-				self.visitedDocuments.append(iframeSrc)
+				if target in iframeSrc:
+					print(colored('DOCUMENT: ' + iframeSrc, 'red'))
+					contentDoc.append(iframeSrc)
+					self.visitedDocuments.append(iframeSrc)
 
 		data = {
 			'videos' : contentVid,
 			'documents' : contentDoc
 		}
+
+		print(colored('DOCUMENT: ' + contentVid, 'red'))
+					
 
 		return data
 
